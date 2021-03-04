@@ -18,8 +18,7 @@ public class ProcessosController {
 	}
 	
 	public String os () {
-		this.os = System.getProperty("os.name");
-		
+		this.os = System.getProperty("os.name");	
 		return os;
 	}
 	
@@ -46,8 +45,21 @@ public class ProcessosController {
 				e.getMessage();
 			}
 		} else {
+			String command = "ps -ef";
 			try {
+				Process process = Runtime.getRuntime().exec(command);
+				InputStream fluxo = process.getInputStream();
+				InputStreamReader ler = new InputStreamReader(fluxo);
+				BufferedReader buffer = new BufferedReader(ler);
+				String linha = buffer.readLine();
 				
+				while (linha!=null) {
+					System.out.println(linha);
+					linha = buffer.readLine();
+				}
+				fluxo.close();
+				ler.close();
+				buffer.close();
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -58,7 +70,6 @@ public class ProcessosController {
 		String si = os();
 		if(si.contains("Windows")) {
 			String cmdPid = "TASKKILL /PID";
-			String cmdName = "TASKKILL /IM";
 			int pid = 0;
 			StringBuffer sb = new StringBuffer();
 			
@@ -70,8 +81,23 @@ public class ProcessosController {
 				
 				Runtime.getRuntime().exec(sb.toString());
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Entrada Invalida! Escolha outra opção para essa entrada.");
+				JOptionPane.showMessageDialog(null, "Entrada Invalida! Escolha outra opï¿½ï¿½o para essa entrada.");
 			}	
+		} else {
+			String cmdPid = "kill -9";
+			int pid = 0;
+			
+			StringBuffer buffer = new StringBuffer();
+			try {
+				pid = Integer.parseInt(param);
+				buffer.append(cmdPid);
+				buffer.append(" ");
+				buffer.append(pid);
+				
+				Runtime.getRuntime().exec(buffer.toString());
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Entrada InvÃ¡lida! Escolha outra opÃ§Ã£o.");
+			}
 		}
 	}
 	
@@ -86,8 +112,20 @@ public class ProcessosController {
 		try {
 			Runtime.getRuntime().exec(sb.toString());
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Entrada invalida! Escolha outra opção para essa entrada");
+			JOptionPane.showMessageDialog(null, "Entrada invalida! Escolha outra opcao.");
 		}
+		} else {
+			String cmdName = "pkill -f";
+			StringBuffer buffer = new StringBuffer();
+			buffer.append(cmdName);
+			buffer.append(" ");
+			buffer.append(param);
+			
+			try {
+				Runtime.getRuntime().exec(buffer.toString());
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Entrada Invalida! Escolha outra opcao.");
+			}
 		}
 		
 	}
