@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.swing.JOptionPane;
+
 
 
 public class ProcessosController {
@@ -52,7 +54,7 @@ public class ProcessosController {
 		}
 	}
 	
-	public void kill(String param) {
+	public void killID(String param) {
 		String si = os();
 		if(si.contains("Windows")) {
 			String cmdPid = "TASKKILL /PID";
@@ -66,18 +68,28 @@ public class ProcessosController {
 				sb.append(" ");
 				sb.append(pid);
 				
-			} catch (Exception e) {
-				sb.append(cmdName);
-				sb.append(" ");
-				sb.append(param);
-			}
-			try {
 				Runtime.getRuntime().exec(sb.toString());
-			} catch (IOException e) {
-
-				e.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Entrada Invalida! Escolha outra opção para essa entrada.");
 			}	
 		}
+	}
+	
+	public void killName(String param) {
+		String si = os();
+		if(si.contains("Windows")) {
+		String cmdName = "TASKKILL /IM";
+		StringBuffer sb = new StringBuffer();
+		sb.append(cmdName);
+		sb.append(" ");
+		sb.append(param);
+		try {
+			Runtime.getRuntime().exec(sb.toString());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Entrada invalida! Escolha outra opção para essa entrada");
+		}
+		}
+		
 	}
 	
 	public void callProcess(String process) {
